@@ -1,25 +1,23 @@
-# open GeoJSON
-# cluster points with quadtree
-# if cluster has more than 50 points, quadtree
-# ad cluster_id
-# draw algorithm
-# ad extra algorithms
 import json, quadtree
 
+# open GeoJSON
 with open('input.geojson', encoding='utf-8', mode='r') as f:
     data = json.load(f)
 
-
+# new list of features
 features = data["features"]
+
+# setting up new attribute "cluster_ID" with base value
 for feat in features:
     feat['properties']['cluster_ID'] = "1"
 
-features_test = features
-features_new = quadtree.quadtree(features_test)
+# quadtree
+features_new = quadtree.quadtree(features)
 
+# export preparation
 data_NEW = {"type": "FeatureCollection"}
 data_NEW["features"] = features_new
 
-
+# new GeoJSON
 with open('output.geojson', encoding='utf-8', mode='w') as f:
     json.dump(data_NEW, f, indent=2, ensure_ascii=False)
