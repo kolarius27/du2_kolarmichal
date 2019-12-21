@@ -1,4 +1,4 @@
-from turtle import speed, penup, pendown, setpos, seth, forward, dot, pencolor, screensize, exitonclick, setworldcoordinates
+from turtle import speed, penup, pendown, setpos, seth, forward, dot, pencolor, screensize, exitonclick, setworldcoordinates, colormode, pensize, tracer
 from random import randint
 
 # new list "final_features"
@@ -70,42 +70,35 @@ def quadtree(features):
     return final_features
 
 
-def quadtree_turtle_points(xpoints, ypoints):
+def quadtree_turtle_points(xpoints, ypoints, line, dot_size):
+    tracer(len(xpoints)*6)
+    colormode(255)
     randcolor = (randint(0, 255), randint(0, 225), randint(0, 255))
     for k in range(len(xpoints)):
+        pencolor(randcolor)
         penup()
         setpos(xpoints[k], ypoints[k])
         pendown()
-        dot(10, "blue")
+        dot(dot_size)
         penup()
 
-#def quad_turtle_square(xmin, xmax, ymin, ymax):
-
-
-def quadtree_turtle_draw(points, x_min, x_max, y_min, y_max):
+def quadtree_turtle_draw(points, x_min, x_max, y_min, y_max, line, dot_size):
     xpoints = [pointx[0] for pointx in points]
     ypoints = [pointy[1] for pointy in points]
 
-    quadtree_turtle_points(xpoints, ypoints)
+    quadtree_turtle_points(xpoints, ypoints, line, dot_size)
 
-    pencolor("red")
-    penup()
-    setpos(x_min, y_min)
-    pendown()
-    setpos(x_min, y_max)
-    setpos(x_max, y_max)
-    setpos(x_max, y_min)
-    setpos(x_min, y_min)
-    penup()
+
 
     NW = []  # north-west quadrant
     NE = []  # north-east quadrant
     SW = []  # south-west quadrant
     SE = []  # south-east quadrant
 
-    if len(points) > 50:
-        x_mid = (x_max + x_min) / 2
-        y_mid = (y_max + y_min) / 2
+    x_mid = (x_max + x_min) / 2
+    y_mid = (y_max + y_min) / 2
+    line = line / 2
+    if len(points) > 100:
         # appending points with new cluster ids (based on X/Y values compared to mid values) to 4 quadrants NW/NE/SW/SE
         for pnt in points:
             x, y = pnt
@@ -117,23 +110,28 @@ def quadtree_turtle_draw(points, x_min, x_max, y_min, y_max):
                 SW.append(pnt)
             else:
                 SE.append(pnt)
+
+        pencolor("red")
+        pensize(line)
+        speed(1)
+
+        setpos(x_min, y_mid)
+        pendown()
+        setpos(x_max, y_mid)
+        penup()
         setpos(x_mid, y_min)
         pendown()
         setpos(x_mid, y_max)
         penup()
-        setpos(y_mid, x_min)
-        pendown()
-        setpos(y_mid, x_max)
-        penup()
 
     # recursion of the function with new 4 quadrant lists as attributes
-    quadtree_turtle_draw(NW, x_min, x_mid, y_mid, y_max)
-    quadtree_turtle_draw(NE, x_mid, x_max, y_mid, y_max)
-    quadtree_turtle_draw(SW, x_min, x_mid, y_min, y_mid)
-    quadtree_turtle_draw(SE, x_mid, x_max, y_min, y_mid)
+        quadtree_turtle_draw(NW, x_min, x_mid, y_mid, y_max, line, dot_size)
+        quadtree_turtle_draw(NE, x_mid, x_max, y_mid, y_max, line, dot_size)
+        quadtree_turtle_draw(SW, x_min, x_mid, y_min, y_mid, line, dot_size)
+        quadtree_turtle_draw(SE, x_mid, x_max, y_min, y_mid, line, dot_size)
 
 
-def quadtree_turtle(features, resolution):
+def quadtree_turtle(features, resolution, line, dot_size):
     screensize(resolution+100, resolution+100)
     speed(10)
     points = []
@@ -162,7 +160,18 @@ def quadtree_turtle(features, resolution):
     x_min = min(points_x_scaled)
     y_min = min(points_y_scaled)
 
-    quadtree_turtle_draw(points_scaled, x_max, y_max, x_min, y_min)
+    pencolor("red")
+    pensize(line)
+    penup()
+    setpos(x_min, y_min)
+    pendown()
+    setpos(x_min, y_max)
+    setpos(x_max, y_max)
+    setpos(x_max, y_min)
+    setpos(x_min, y_min)
+    penup()
+
+    quadtree_turtle_draw(points_scaled, x_min, x_max, y_min, y_max, line, dot_size)
 
     exitonclick()
 

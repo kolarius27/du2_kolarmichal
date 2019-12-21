@@ -13,7 +13,7 @@ for feat in features:
 
 # quadtree
 features_new = quadtree.quadtree(features)
-quadtree.quadtree_turtle(features, 500)
+quadtree.quadtree_turtle(features, 700, 10, 5)
 
 # export preparation
 data_NEW = {"type": "FeatureCollection"}
