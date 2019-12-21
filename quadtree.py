@@ -1,4 +1,5 @@
 from turtle import speed, penup, pendown, setpos, seth, forward, dot, pencolor, screensize, exitonclick, setworldcoordinates
+from random import randint
 
 # new list "final_features"
 final_features = []
@@ -21,6 +22,7 @@ def quadtree_mids(features):
     x_mid = (x_max + x_min) / 2
     y_mid = (y_max + y_min) / 2
     return x_mid, y_mid
+
 
 # quadtree main function
 def quadtree(features):
@@ -68,22 +70,82 @@ def quadtree(features):
     return final_features
 
 
-
-def quadtree_turtle(points):
-    points_x = [pointx[0] for pointx in points]
-    points_y = [pointy[1] for pointy in points]
-    point_x_min = min(points_x)
-    point_x_max = max(points_x)
-    point_y_min = min(points_y)
-    point_y_max = max(points_y)
-    print(point_x_min, point_y_min, point_x_max, point_y_max)
-    setworldcoordinates(point_x_min, point_y_min, point_x_max, point_y_max)
-    for k in range(len(points)):
+def quadtree_turtle_points(xpoints, ypoints):
+    randcolor = (randint(0, 255), randint(0, 225), randint(0, 255))
+    for k in range(len(xpoints)):
         penup()
-        setpos(points_x[k], points_y[k])
+        setpos(xpoints[k], ypoints[k])
         pendown()
-        dot(10, "blue")
+        dot(10, randcolor)
         penup()
+
+
+def quadtree_turtle_draw(points):
+    xpoints = [pointx[0] for pointx in points]
+    ypoints = [pointy[1] for pointy in points]
+
+    quadtree_turtle_points(xpoints, ypoints)
+
+    x_min = min(xpoints)
+    x_max = max(xpoints)
+    y_min = min(ypoints)
+    y_max = max(ypoints)
+
+    pencolor("red")
+    penup()
+    setpos(x_min, y_min)
+    pendown()
+    setpos(x_min, y_max)
+    setpos(x_max, y_max)
+    setpos(x_max, y_min)
+    penup()
+
+    NW = []  # north-west quadrant
+    NE = []  # north-east quadrant
+    SW = []  # south-west quadrant
+    SE = []  # south-east quadrant
+
+    if len(points) > 50:
+        x_mid = (x_min + x_max) / 2
+        y_mid = (y_min + y_max) / 2
+        # appending points with new cluster ids (based on X/Y values compared to mid values) to 4 quadrants NW/NE/SW/SE
+        for pnt in points:
+            x, y = points
+            if x < x_mid and y > y_mid:
+                NW.append(pnt)
+            elif x > x_mid and y > y_mid:
+                NE.append(pnt)
+            elif x < x_mid and y < y_mid:
+                SW.append(pnt)
+            else:
+                SE.append(pnt)
+
+    # recursion of the function with new 4 quadrant lists as attributes
+    quadtree_turtle_draw(NW)
+    quadtree_turtle_draw(NE)
+    quadtree_turtle_draw(SW)
+    quadtree_turtle_draw(SE)
+
+
+def quadtree_turtle(features):
+    points = []
+    for feat in features:
+        coordinates = feat["geometry"]["coordinates"]
+        points.append(coordinates)
+
+    x_mid, y_mid = quadtree_mids(features)
+
+    points_x = [pointx[0] - x_mid for pointx in points]
+    points_y = [pointy[1] - y_mid for pointy in points]
+    x_min = min(points_x)
+    x_max = max(points_x)
+    y_min = min(points_y)
+    y_max = max(points_y)
+
+    #setworldcoordinates(x_min, y_min, x_max, y_max)
+
+    quadtree_turtle_draw(points)
+
     exitonclick()
 
 
