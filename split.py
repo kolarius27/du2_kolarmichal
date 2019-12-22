@@ -19,7 +19,7 @@ features_new = quadtree.quadtree(features)
 # resolution = side of a rescaling scale (recommended values: 300-1000), depends on points length
 # line = size of bounding box line, is reduced by half with every recursion
 # dot_size = size of dot symbolizing address point (recommended values: 3-10), depends on points length and resolution
-quadtree.quadtree_turtle(features, 700, 10, 5)
+quadtree.quadtree_turtle(features, 700, 10, 10)
 
 # export preparation
 data_NEW = {"type": "FeatureCollection"}
