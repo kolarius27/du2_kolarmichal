@@ -17,3 +17,9 @@ Quad tree algorithm itself is represented by three functions: "quadtree", "quadt
 Drawing quad tree algorithm consists of three functions: "quadtree_turtle_points", "quadtree_turtle_draw" and "quadtree_turtle". "quadtree_turtle" rescales point coordinates to fit pre-defined square by argument "resolution". Bounding box is then calculated and drawn. In the end "quadtree_turtle_draw" is called. 
 
 Within "quadtree_turtle_draw" function "quadtree_turtle point" is called. It generates random color and draws dots symbolizing address points, so every cluster has different color thanks to it. It is possible to change dot size depending on length of point list and "resolution" argument. After that number of points in list is tested. If it is lower than 50, points are divided to 4 new lists as in the main quadtree function, bounding box is sliced to 4 quadrants and function calls itself with 4 new lists as arguments. Line size is editable as well, with every recusion the size is reduced by half. 
+
+### Turtle graphics: 
+![alt text](https://github.com/kolarius27/du2_kolarmichal/blob/master/test_draw.png)
+
+### QGIS: 
+![alt text](https://github.com/kolarius27/du2_kolarmichal/blob/master/test_qgis.png)
